@@ -1,0 +1,17 @@
+06/08
+
+A funcao de trilha esta funcionando. Porem, ha o bug de clicar no botao submit e depois
+atualizar a pagina, a requisicao continua do lado do server. Precisa consertar esse bug, 
+para que nao aconteca um ataque de overload server.
+
+Ainda falta adicionar as duas outras funcoes - relatorio e workspaces.
+
+
+
+
+
+
+
+
+
+Trilhas de exemplo: TR Pme Carteira E2E, TR Retenção Móvel X 44700 Silver Púr Nex

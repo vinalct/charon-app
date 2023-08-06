@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charon Extraction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2c2c;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #6a1b9a;
+            color: #fff;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 24px;
+        }
+
+        .btn:hover {
+            background-color: #8e24aa;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            color: #000;
+            z-index: 2;
+        }
+
+        .popup input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .popup input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Charon Extraction</h1>
+    <button class="btn" onclick="showPopup()">CURSOS</button>
+
+    <div class="overlay" onclick="hidePopup()"></div>
+
+    <div class="popup">
+        <form action="/download-cursos" method="post">
+            <label for="course-names">Informe os nomes dos cursos divididos por vírgula (máx 10 cursos):</label>
+            <input type="text" id="courseNames" name="course_names" required>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+
+        var requestIsActive = false;
+
+        function showPopup() {
+            document.querySelector('.overlay').style.display = 'block';
+            document.querySelector('.popup').style.display = 'block';
+        }
+
+        function hidePopup(event) {
+            if (event.target === document.querySelector('.overlay')) {
+                document.querySelector('.overlay').style.display = 'none';
+                document.querySelector('.popup').style.display = 'none';
+            }
+        }
+
+        document.querySelector(".popup form").addEventListener('submit', function(event){
+            event.preventDefault();
+            hidePopup(event);
+            document.querySelector(".popup input[type='submit']").disabled = true;
+
+            var loadingMessage = document.createElement("p");
+            loadingMessage.textContent = "Carregando...";
+            document.querySelector(".popup").appendChild(loadingMessage);
+
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+
+            event.target.submit();
+
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+        });
+        
+        function beforeUnloadHandler(e) {
+            if (requestIsActive) {
+                var confirmationMessage = "Uma requisição ainda está em processo. Realmente reseja sair?";
+                e.returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+
+        }
+        window.addEventListener('beforeunload', beforeUnloadHandler);
+        
+    </script>
+</body>
+</html>
