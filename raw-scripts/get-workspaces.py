@@ -11,11 +11,18 @@ headers = {
 }
 
 def get_workspace_ids():
+    """
+    Resgata os IDs de cada workspace (repositorios).
     
+    Retorna:
+        lista dos IDs.
+    
+    """
     WORKSPACE_STARTS = 0
     WORKSPACE_LIMIT = 50
     workspace_ids = []
     while True:
+        #Faz uma requisicao para resgatar os detalhes de cada workspace
         response = requests.get(
             f'https://api.prod.timetoknow.com/PlayAppService/channelQuery/'
             f'section?limit={WORKSPACE_LIMIT}&orderBy=&section=CONTENT_WORKSPACES&sortOrder'
@@ -25,6 +32,7 @@ def get_workspace_ids():
     
         data = response.json()
         
+        #Extrai os IDs da resposta
         workspace_ids.extend([id['id'] for id in data])
         
         WORKSPACE_STARTS += WORKSPACE_LIMIT
@@ -35,6 +43,18 @@ def get_workspace_ids():
 
 
 def get_courses_workspace(workspace_id):
+    """
+    Resgata os conteudos especificos de cada workspace usando o ID 
+    recuperado na funcao anterior.
+    
+    Args:
+        workspace_id (str): o ID dos workspaces (repositorios)
+        
+    Retorno:
+        lista: uma lista com os detalhes dos conteudos
+    
+    """
+    #Faz a requisicao para o resgate dos detalhes dos conteudos.
     response = requests.get(
         f'https://api.prod.timetoknow.com/LibraryService/v2/channels/'
         f'{workspace_id}/content?contentOrderBy='
@@ -46,6 +66,7 @@ def get_courses_workspace(workspace_id):
     library_items = data.get('libraryItems', [])
     extracted_data = []
     for item in library_items:
+        #Extrai as informacoes relevantes dos conteudos.
         extracted_data.append(
             {
             'Estante': workspace_name,
@@ -61,16 +82,30 @@ def get_courses_workspace(workspace_id):
     return extracted_data
 
 def write_to_csv(data, writer):
+    """
+    Registra as informacoes em CSV.
+    
+    Args: 
+        data (list): as informacoes extraidas das APIs.
+        writer (csv.DictWriter): o registrador de CSV.
+    
+    """
     for row in data:
         writer.writerow(row)
 
 
 def main():
+    """
+    A funcao principal que captura os detalhes dos workspaces e dos conteudos
+    e registra no arquivo CSV.
+    
+    """
     workspace_ids = get_workspace_ids()
     filename = "Charon_workspaces.csv"
     name, extension = os.path.splitext(filename)
     counter = 1
     
+    #Garante que cada nome de arquivo seja unico.
     while os.path.isfile(filename):
         filename = f"{name}_{counter}{extension}"
         counter += 1
