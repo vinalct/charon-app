@@ -3,13 +3,13 @@ import csv
 import time
 import os
 
-
+#Headers necessario para realizar a requisicao na API.
 headers = {
     'Authorization': f'Bearer {api_token}',
     'Content-Type': 'application/json'
 }
 
-
+#Um delay para evitar flood de requisicao na API.
 SLEEP_TIME = 1
 
 def get_catalog_items(input_trail_names):
