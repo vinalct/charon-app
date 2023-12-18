@@ -26,9 +26,9 @@ def get_catalog_items(input_trail_names):
     found_trails = set()
     while True:
         response = requests.get(
-            f'https://api.prod.timetoknow.com/PlayAppService/catalogItems/'
+            f'https://--'
             f'v2?orderBy=created&sortOrder=DESC&start={CATALOG_STARTS}&catalogItem'
-            f'RequestType=MANAGE_CATALOG&limit={CATALOG_LIMIT}',
+            f'--MANAGE_CATALOG&limit={CATALOG_LIMIT}',
             headers=headers
         )
 
@@ -67,7 +67,7 @@ def get_course_names(course_id):
         courses_status: o status de cada um dos cursos contidos na trilha.
         id_conteudo: o ID de cada um dos cursos.
     """
-    response = requests.get(f'https://api.prod.timetoknow.com/LibraryService/v2/channels/'
+    response = requests.get(f'https://--channels/'
                             f'{course_id}/content?contentOrderBy=publishExtraData.serverPu'
                             f'blishDate&contentSortOrder=DESC', headers=headers)
     data = response.json()
@@ -84,7 +84,7 @@ def get_course_structure(structure_id, course_id, course_names, courses_status):
     Essa funcao, a partir dos IDs das estruturas das trilhas, ordena os conteudos conforme
     é visto no site. Ou seja, organiza as informacoes adquiridas na funcao anterior.
     """
-    response = requests.get(f'https://api.prod.timetoknow.com/PlayAppService/contentStructure/'
+    response = requests.get(f'https://--contentStructure/'
                             f'{structure_id}/version/1?channelId={course_id}', headers=headers)
     data = response.json()
 
